@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </nav>
-            <div id="songs" class="container-fluid">
+            <div v-bind:class="{ shrinkSongs: info }" id="songs" class="container-fluid">
                 <audio v-on:ended="next" id="player" autobuffer src="">
                     <p>
                         What? Your browser doesn't support
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <div id="info" class="container-fluid">
+            <div v-bind:class="{ infoActive: info }" id="info" class="container-fluid">
                 <div class="row no-gutters">
                     <div class="col-xs-11">
                         <a @click="playFile" id="name">

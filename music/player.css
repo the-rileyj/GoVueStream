@@ -38,18 +38,31 @@ html {
 
 #songs {
     background-color: #11CDCC;
-    height:33%;
     overflow-y: scroll;
     overflow-x: hidden;
     border-bottom: solid black;
+    height: 100%;
+    -webkit-transition: height 1s; /* Safari */
+    transition: height 1s;
 }
 
 #info {
     padding-top: 1rem;
     background-color: #11CDAA;
-    height: 49%;
+    height: 0%;
     overflow: hidden;
     text-align: left;
+    -webkit-transition: height 1s; /* Safari */
+    transition: height 1s;
+    overflow: hidden;
+}
+
+.infoActive {
+    height: 55%!important;
+}
+
+.shrinkSongs {
+    height:33%!important;
 }
 
 .play {
