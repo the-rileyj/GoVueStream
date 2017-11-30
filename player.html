@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>a simple music player</title>      
+    <link rel="shortcut icon" type="image/png" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no,user-scalable=no, minimal-ui">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" type="text/css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet">
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+    <link href="./music/player.css" rel="stylesheet">
+    <script src="./music/fontawesome.js"></script>
+    <script defer src="./music/player.js"></script>
+    <script defer src="./music/solid.js"></script>
+</head> 
+<body>
+    <div id="app">
+        <v-app>
+            <nav id="navb" class="navbar navbar-toggleable-md navbar-light bg-faded">
+                <button @click="toggleBottom" id="tb" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" id="title">GoStream</a>
+                <div id="controlSeek" class="container-fluid">
+                    <div class="row progress-row no-gutters">
+                        <div @click="handleSeek" class="col progress" id="prog">
+                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div id="controlPlay" class="container-fluid">
+                        <div class="row">
+                            <div class="col sb">
+                                <button @click="toggleLoop" id="repeat" class="btn tb">
+                                    <i class="fa fa-undo" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="align-top">
+                                    <button @click="toggleLoopPlaylist" class="btn" id="repeat-playlist" title="Repeat this playlist">
+                                        <i class="fa fa-repeat" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="col-sm-4 sb">
+                                <span class="align-top">
+                                    <button @click="toggleShufflePlaylist" class="btn tb" id ="shuffle-playlist" title="Shuffle this playlist">
+                                        <i class="fa fa-random" aria-hidden="true"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 sb br">
+                                <span @click="prev" class="align-top"><button class="btn tb" id="prev" title = "prev this song!"><i class="fa fa-chevron-double-left" aria-hidden="true"></i></button></span>
+                            </div>
+                            <div class="col-sm-4 br">
+                                <span @click="togglePlay" class="align-top"><button class="btn tb" id="play"><i class="fa fa-play" aria-hidden="true"></i></button></span>
+                            </div>
+                            <div class="col-sm-4 sb br">
+                                <span @click="next" class="align-top"><button class="btn tb" id="next" title = "skip this song!"><i class="fa fa-chevron-double-right" aria-hidden="true"></i></button></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col sb">
+                                <input id="search" class="form-control mr-sm-2" type="text" placeholder="Search"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col sb">
+                                <span id="results"></span>
+                            </div>
+                        </div>
+                        <div v-if="q" class="row">
+                            <div class="col sb">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div id="songs" class="container-fluid">
+                <audio v-on:ended="next" id="player" autobuffer src="">
+                    <p>
+                        What? Your browser doesn't support
+                    </p>
+                </audio>
+                <div class="row">
+                    <div id="playlist" class="col-sm-12">
+
+                    </div>
+                </div>
+            </div>
+            <div id="info" class="container-fluid">
+                <div class="row no-gutters">
+                    <div class="col-xs-11">
+                        <a @click="playFile" id="name">
+                        </a>
+                    </div>
+                    <div class="col-xs-1">
+                        <a id="length">
+                        </a>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-xs-12">
+                        <a id="addToQueue" class="play al">
+                            Add To Queue
+                        </a>
+                    </div>
+                </div>
+                <div class="row no-gutters"></div>
+                    <div class="col-xs-12">
+                        <a id="addToPlaylist" class="play ar">
+                            Add To Playlist
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--v-parallax height="1080" v-bind:src="ps" id="np"></v-parallax-->
+        </v-app>
+    </div>
+</body>
+</html>
